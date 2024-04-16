@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["ChaserZ98 <feiyuzheng98@gmail.com>"]
 readme = "README.md"
-packages = [{include = "chaserland_common", from = "src"}]
+packages = [{ include = "chaserland_common", from = "src" }]
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -13,6 +13,10 @@ python = "^3.12"
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
 pytest-cov = "^5.0.0"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = ["--cov=chaserland_common", "--cov-report=html"]
 
 [build-system]
 requires = ["poetry-core"]
