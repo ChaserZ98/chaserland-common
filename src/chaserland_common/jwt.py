@@ -32,7 +32,7 @@ class JWTBearer:
             header, payload, signature = self.access_token.split(".")
         except ValueError:
             return False
-        signature = JWT.addPadding(signature)
+        signature = JWT.add_padding(signature)
         message = f"{header}.{payload}"
         public_key = ECC.import_key(public_key)
         verifier = DSS.new(public_key, mode)
@@ -81,11 +81,11 @@ class JWT:
     @staticmethod
     def decode(data: str, encoding: str = "utf-8") -> dict:
         return json.loads(
-            base64.urlsafe_b64decode(JWT.addPadding(data)).decode(encoding)
+            base64.urlsafe_b64decode(JWT.add_padding(data)).decode(encoding)
         )
 
     @staticmethod
-    def addPadding(data: str) -> str:
+    def add_padding(data: str) -> str:
         return data + "=" * (4 - len(data) % 4)
 
     def generate_bearer_string(
