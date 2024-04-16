@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import base64
 import json
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
 from Crypto.Hash import SHA256
 from Crypto.PublicKey import ECC
@@ -52,7 +52,7 @@ class JWTHeader:
     typ: str = "JWT"
 
     def to_urlsafe_base64(self, encoding: str = "utf-8") -> str:
-        return JWT.encode(self.model_dump(), encoding=encoding)
+        return JWT.encode(asdict(self), encoding=encoding)
 
 
 class JWTPayload(dict):
