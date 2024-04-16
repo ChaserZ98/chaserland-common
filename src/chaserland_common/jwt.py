@@ -69,7 +69,9 @@ class JWT:
     def encode(data: dict | bytes, encoding: str = "utf-8") -> str:
         if isinstance(data, dict):
             return (
-                base64.urlsafe_b64encode(json.dumps(data).encode(encoding))
+                base64.urlsafe_b64encode(
+                    json.dumps(data, separators=(",", ":")).encode(encoding)
+                )
                 .decode(encoding)
                 .replace("=", "")
             )
