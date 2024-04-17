@@ -10,6 +10,7 @@ packages = [{ include = "chaserland_common", from = "src" }]
 python = "^3.12"
 pycryptodome = "^3.20.0"
 grpcio = "^1.62.1"
+grpc-interceptor = "^0.15.4"
 
 
 [tool.poetry.group.dev.dependencies]
