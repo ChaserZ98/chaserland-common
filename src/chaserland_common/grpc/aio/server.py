@@ -6,7 +6,7 @@ from typing import Self
 
 import grpc
 
-from chaserland_common.grpc import logger
+from chaserland_common.grpc.logger import logger
 from chaserland_common.ref import Ref
 
 

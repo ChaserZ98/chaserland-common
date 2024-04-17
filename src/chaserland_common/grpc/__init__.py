@@ -1,6 +1,3 @@
-import logging
-
+from .logger import logger
 from .provider import AbstractProvider
 from .servicer import BaseServicer
-
-logger = logging.getLogger("grpc")
