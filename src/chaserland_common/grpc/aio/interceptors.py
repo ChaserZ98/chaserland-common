@@ -53,6 +53,9 @@ class AsyncAccessLoggerInterceptor(AsyncServerInterceptor):
 
 
 class AsyncExceptionToStatusInterceptor(AsyncServerInterceptor):
+    def __init__(self, logger: logging.Logger = logging.getLogger("grpc")):
+        self.logger = logger
+
     async def intercept(
         self,
         method: Callable,
@@ -69,6 +72,7 @@ class AsyncExceptionToStatusInterceptor(AsyncServerInterceptor):
             await self.handle_exception(e, context)
 
     async def handle_exception(self, e: Exception, context: grpc.aio.ServicerContext):
+        self.logger.exception(e)
         if isinstance(e, grpc_exceptions.GrpcException):
             await context.abort(e.status_code, e.details)
         else:
