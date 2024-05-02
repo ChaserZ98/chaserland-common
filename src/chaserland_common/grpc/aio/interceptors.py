@@ -26,7 +26,7 @@ class AsyncAccessLoggerInterceptor(AsyncServerInterceptor):
         rpc_id = metadata["rpc-id"]
         start_time = time.perf_counter() * 1000
         try:
-            response_or_iterator = await method(request_or_iterator, context)
+            response_or_iterator = method(request_or_iterator, context)
             if hasattr(response_or_iterator, "__aiter__"):
                 return self._intercept_streaming(
                     response_or_iterator, context, start_time, method_name
@@ -61,7 +61,7 @@ class AsyncExceptionToStatusInterceptor(AsyncServerInterceptor):
         method_name: str,
     ) -> Any:
         try:
-            response_or_iterator = await method(request_or_iterator, context)
+            response_or_iterator = method(request_or_iterator, context)
             if hasattr(response_or_iterator, "__aiter__"):
                 return self._intercept_streaming(response_or_iterator, context)
             return await response_or_iterator
