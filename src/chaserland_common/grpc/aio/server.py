@@ -1,4 +1,5 @@
 import asyncio
+import signal
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from contextlib import AbstractAsyncContextManager
@@ -51,9 +52,13 @@ class Server:
             self.loop.run_until_complete(self.start())
         except KeyboardInterrupt:
             logger.info("KeyboardInterrupt received.")
-        finally:
             self.loop.run_until_complete(self.graceful_shutdown())
+        finally:
             self.loop.close()
+
+    def signal_handler(self, sig, frame):
+        logger.info(f"Signal {signal.Signals(sig).name} received.")
+        self.loop.create_task(self.graceful_shutdown())
 
     async def graceful_shutdown(self):
         logger.info(
@@ -62,13 +67,17 @@ class Server:
         await self.server.stop(self.graceful_shutdown_timeout)
 
     async def start(self):
+        logger.info(f"Creating server on {self.address}...")
         self.server = grpc.aio.server(interceptors=self.interceptors)
         self.server.add_insecure_port(self.address)
-        logger.info(f"Server created on {self.address}.")
+
+        logger.info("Setting up signal handlers...")
+        signal.signal(signal.SIGINT, self.signal_handler)
+        signal.signal(signal.SIGTERM, self.signal_handler)
 
         for register_func, servicer in self.servicers:
+            logger.info(f"Adding servicer {servicer.__class__.__name__}...")
             register_func(servicer, self.server)
-            logger.info(f"Servicer {servicer.__class__.__name__} added.")
 
         async with self.lifespan(self) as context:
             self.context_ref.current = context
