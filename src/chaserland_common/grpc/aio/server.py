@@ -51,14 +51,14 @@ class Server:
         try:
             self.loop.run_until_complete(self.start())
         except KeyboardInterrupt:
-            logger.info("KeyboardInterrupt received.")
+            logger.info("KeyboardInterrupt raised.")
             self.loop.run_until_complete(self.graceful_shutdown())
         finally:
             self.loop.close()
 
     def signal_handler(self, sig, frame):
         logger.info(f"Signal {signal.Signals(sig).name} received.")
-        self.loop.create_task(self.graceful_shutdown())
+        raise KeyboardInterrupt
 
     async def graceful_shutdown(self):
         logger.info(
