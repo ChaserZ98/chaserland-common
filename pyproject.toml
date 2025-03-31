@@ -17,10 +17,18 @@ packages = [{ include = "chaserland_common", from = "src" }]
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
 pytest-cov = "^6.0.0"
+mypy = "^1.15.0"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = ["--cov=chaserland_common", "--cov-report=term", "--cov-report=html"]
+
+[tool.mypy]
+python_version = "3.12"
+
+[[tool.mypy.overrides]]
+module = "grpc"
+follow_untyped_imports = true
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
