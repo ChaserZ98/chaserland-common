@@ -26,16 +26,17 @@ class Server:
         self,
         address: str,
         graceful_shutdown_timeout: int = 5,
-        lifespan: Callable[[Self], AbstractAsyncContextManager[AbstractContext]] = None,
-        interceptors: list[grpc.ServerInterceptor] = None,
-        loop: asyncio.AbstractEventLoop = None,
+        lifespan: Callable[[Self], AbstractAsyncContextManager[AbstractContext]]
+        | None = None,
+        interceptors: list[grpc.ServerInterceptor] = [],
+        loop: asyncio.AbstractEventLoop | None = None,
     ):
         self.interceptors = interceptors
         self.address = address
         self.graceful_shutdown_timeout = graceful_shutdown_timeout
         self.lifespan = lifespan
         self.context_ref: Ref[AbstractContext] = Ref()
-        self.servicers = []
+        self.servicers: list[tuple[Callable, object]] = []
 
         self.loop = loop or asyncio.get_event_loop()
 
